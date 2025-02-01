@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'SignUpLoginPage.dart'; // Ensure this import is correct
+import 'SignUpLoginPage.dart';
+import 'HomeScreen.dart';
+import '/widgets/FlashCardsScreen.dart'; 
+import 'ChapterScreen.dart';// Ensure this import is correct
 void main() async {
   runApp(MyApp());
 }
@@ -16,6 +19,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const SplashPage(),
+      routes: {
+        '/home': (context) => const HomeScreen(),'/chapters': (context) => const ChaptersScreen(),
+    '/flashcards': (context) => const FlashcardsScreen(),
+  },
     );
   }
 }
@@ -145,7 +152,7 @@ class MainPage extends StatelessWidget {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => const SignUpLoginPage(),
+      builder: (context) => SignUpLoginPage(),
     ),
   );
 },
