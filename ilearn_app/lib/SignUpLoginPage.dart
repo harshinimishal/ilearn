@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_input_field.dart';
-import '../widgets/social_button.dart';
-import '/TermsConditionsScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'TermsConditionsScreen.dart';
 import 'ForgetPassword.dart';
+import '../widgets/custom_input_field.dart';
+
 class SignUpLoginPage extends StatefulWidget {
-  const SignUpLoginPage({Key? key}) : super(key: key);
+  const SignUpLoginPage({super.key});
 
   @override
   State<SignUpLoginPage> createState() => _SignUpLoginPageState();
@@ -12,11 +14,59 @@ class SignUpLoginPage extends StatefulWidget {
 
 class _SignUpLoginPageState extends State<SignUpLoginPage> {
   bool isLogin = true;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController schoolController = TextEditingController();
+  bool _isChecked = false;
+
+  /// 🔹 **Login Function**
+  Future<void> loginUser() async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+      Navigator.pushReplacementNamed(context, '/home');
+      print("✅ Login successful!");
+      
+    } catch (e) {
+      print("❌ Login failed: ${e.toString()}");
+    }
+  }
+
+  /// 🔹 **Signup Function with Firestore**
+  Future<void> signUpUser() async {
+    if (_isChecked) {
+      try {
+        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+        // Store additional user details in Firestore
+        await _firestore.collection("users").doc(userCredential.user!.uid).set({
+          "name": nameController.text.trim(),
+          "email": emailController.text.trim(),
+          "school": schoolController.text.trim(),
+          "createdAt": DateTime.now(),
+        });
+        Navigator.pushReplacementNamed(context, '/home');
+        print("✅ Signup successful!");
+      } catch (e) {
+        print("❌ Signup failed: ${e.toString()}");
+      }
+    } else {
+      print("Please agree to terms and conditions");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,  // Set the page background color to white
+      backgroundColor: Colors.white, // Set background color to white
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
@@ -24,10 +74,10 @@ class _SignUpLoginPageState extends State<SignUpLoginPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 10),
-              // Logo (reduced size and shifted to the left)
+              // Logo
               Row(
                 children: [
-                  Image.asset('assets/images/ilearn_logo.png', height: 30), // Reduced size of logo
+                  Image.asset('assets/images/ilearn_logo.png', height: 30),
                 ],
               ),
               const SizedBox(height: 20),
@@ -36,7 +86,7 @@ class _SignUpLoginPageState extends State<SignUpLoginPage> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 18, 31, 73), // Text color updated to 121F49
+                  color: Color.fromARGB(255, 18, 31, 73),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -45,12 +95,13 @@ class _SignUpLoginPageState extends State<SignUpLoginPage> {
                 'Sign up or log in to embark on an interactive journey with our app!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Color.fromARGB(255, 9, 125, 102),  // Text color updated to 097D66
+                  color: Color.fromARGB(255, 9, 125, 102),
                   fontSize: 16,
                 ),
               ),
               const SizedBox(height: 30),
-              // Login/Signup Toggle
+
+              // Toggle Login/Signup
               Row(
                 children: [
                   Expanded(
@@ -106,135 +157,117 @@ class _SignUpLoginPageState extends State<SignUpLoginPage> {
                 ],
               ),
               const SizedBox(height: 30),
-              // Form Container (below login/signup toggle, background color #E5EFF1)
+
+              // Form Fields
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 229, 239, 241), // Form background color
-                  borderRadius: BorderRadius.circular(10),
+                  color: const Color.fromARGB(255, 229, 239, 241),
+                  borderRadius: BorderRadius.circular(8),
                   boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 5)],
                 ),
                 child: Column(
                   children: [
-                    if (isLogin)
-                      ...[
-                        // Login Form
-                        SocialButton(
-                          text: 'Login with Google',
-                          icon: 'assets/images/google_logo.png',
-                          onPressed: () {},
-                        ),
-                        const SizedBox(height: 20),
-                        const Text(
-                          'Or login with email',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        const SizedBox(height: 20),
-                        const CustomInputField(
-                          icon: Icons.email_outlined,
-                          hint: 'Enter your email',
-                        ),
-                        const SizedBox(height: 15),
-                        const CustomInputField(
-                          icon: Icons.lock_outline,
-                          hint: 'Enter a Password',
-                          isPassword: true,
-                        ),
-                        const SizedBox(height: 10),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {
-                              // Navigate to the ForgetPasswordScreen when tapped
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ForgetPasswordScreen(),
-                                ),
-                              );
-                            },
-                            child: const Text(
-                              'Forget password?',
-                              style: TextStyle(color: Colors.grey),
-                            ),
+                    if (!isLogin) ...[
+                      CustomInputField(
+                        controller: nameController,
+                        hint: "Enter your name",
+                        icon: Icons.person_outline,
+                      ),
+                      const SizedBox(height: 15),
+                    ],
+
+                    // Email field
+                    CustomInputField(
+                      controller: emailController,
+                      hint: "Enter your email",
+                      icon: Icons.email_outlined,
+                    ),
+                    const SizedBox(height: 15),
+
+                    if (!isLogin) ...[
+                      // School field for Sign Up
+                      CustomInputField(
+                        controller: schoolController,
+                        hint: "Enter your School name",
+                        icon: Icons.school_outlined,
+                      ),
+                      const SizedBox(height: 15),
+                    ],
+
+                    // Password field
+                    CustomInputField(
+                      controller: passwordController,
+                      hint: "Enter a Password",
+                      icon: Icons.lock_outline,
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Terms and Conditions (only for Sign Up)
+                    if (!isLogin) ...[
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: _isChecked,
+                            onChanged: (value) => setState(() => _isChecked = value!),
                           ),
-                        ),
-                      ]
-                    else
-                      ...[
-                        // Signup Form
-                        const CustomInputField(
-                          icon: Icons.person_outline,
-                          hint: 'Enter your name',
-                        ),
-                        const SizedBox(height: 15),
-                        const CustomInputField(
-                          icon: Icons.email_outlined,
-                          hint: 'Enter Email',
-                        ),
-                        const SizedBox(height: 15),
-                        const CustomInputField(
-                          icon: Icons.school_outlined,
-                          hint: 'Enter your School name',
-                        ),
-                        const SizedBox(height: 15),
-                        const CustomInputField(
-                          icon: Icons.lock_outline,
-                          hint: 'Enter a Password',
-                          isPassword: true,
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: false,
-                              onChanged: (value) {},
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  // Navigate to the TermsConditionsScreen when tapped
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const TermsConditionsScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'By creating an account you have to agree with our terms & conditions.',
-                                  style: TextStyle(
-                                    color: const Color.fromARGB(255, 127, 127, 127),
-                                    fontSize: 12,
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                // Navigate to the TermsConditionsScreen when tapped
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const TermsConditionsScreen(),
                                   ),
+                                );
+                              },
+                              child: Text(
+                                'By creating an account you have to agree with our terms & conditions.',
+                                style: TextStyle(
+                                  color: const Color.fromARGB(255, 127, 127, 127),
+                                  fontSize: 12,
                                 ),
                               ),
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+                    ],
+                    const SizedBox(height: 10),
+
+                    if (isLogin)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ForgetPasswordScreen()),
+                            );
+                          },
+                          child: const Text("Forgot password?", style: TextStyle(color: Colors.grey)),
                         ),
-                      ],
+                      ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              
+              // Signup/Login Button
               ElevatedButton(
                 onPressed: () {
-                  // Navigate to the HomeScreen when pressed
-                  Navigator.pushNamed(context, '/home');
+                  if (isLogin) {
+                    loginUser();
+                  } else {
+                    signUpUser();
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 18, 31, 73),
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  textStyle: const TextStyle(color: Colors.white),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
-                child: Text(
-                  isLogin ? 'Login' : 'Sign up',
-                  style: const TextStyle(fontSize: 18),
-                ),
+                child: Text(isLogin ? 'Login' : 'Sign up', style: const TextStyle(fontSize: 18)),
               ),
             ],
           ),

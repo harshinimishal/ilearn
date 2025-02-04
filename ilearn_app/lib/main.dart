@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'SignUpLoginPage.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'HomeScreen.dart';
 import '/widgets/FlashCardsScreen.dart'; 
-import 'ChapterScreen.dart';// Ensure this import is correct
+import 'ChapterScreen.dart';
+import 'QuizScreen.dart';
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -22,6 +26,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home': (context) => const HomeScreen(),'/chapters': (context) => const ChaptersScreen(),
     '/flashcards': (context) => const FlashcardsScreen(),
+    '/quizscreen': (context) => const QuizScreen(),
   },
     );
   }

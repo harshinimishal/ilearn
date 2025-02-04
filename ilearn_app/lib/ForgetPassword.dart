@@ -4,7 +4,7 @@ import '../widgets/custom_input_field.dart';
 import '../widgets/PrimaryButton.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
-  const ForgetPasswordScreen({Key? key}) : super(key: key);
+  const ForgetPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,8 @@ class ForgetPasswordScreen extends StatelessWidget {
                       height: 200,
                     ),
                     const SizedBox(height: 40),
-                    const CustomInputField(
+                    CustomInputField(
+                      controller: TextEditingController(),
                       icon: Icons.email_outlined,
                       hint: 'Enter your email',
                     ),

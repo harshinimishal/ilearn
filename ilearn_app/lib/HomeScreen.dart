@@ -3,9 +3,12 @@ import '../widgets/ProgressCard.dart';
 import '../widgets/SubjectCard.dart';
 import '../widgets/FeatureCard.dart';
 import '../widgets/AdvantageCard.dart';
+import '/ChatScreen.dart';
+import '/ARScreen.dart';
+import 'widgets/BottomNavBar.dart'; // Importing the BottomNavBar
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +48,8 @@ class HomeScreen extends StatelessWidget {
               ),
 
               // Welcome Text
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -72,7 +75,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Progress Card
-              const ProgressCard(
+              ProgressCard(
                 learned: 46,
                 total: 60,
               ),
@@ -81,11 +84,11 @@ class HomeScreen extends StatelessWidget {
 
               // Subjects Section
               Padding(
-                padding: const EdgeInsets.only(left: 20),
+                padding: const EdgeInsets.only(left: 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Subjects',
                       style: TextStyle(
                         fontSize: 24,
@@ -93,7 +96,7 @@ class HomeScreen extends StatelessWidget {
                         color: Color(0xFF097D66),
                       ),
                     ),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 24),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -119,7 +122,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Explore',
                       style: TextStyle(
                         fontSize: 24,
@@ -132,7 +135,12 @@ class HomeScreen extends StatelessWidget {
                       icon: Icons.people_outline,
                       title: 'AI TUTOR',
                       description: 'Assistant that helps you learn and grow smarter anytime, anywhere.',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ChatScreen()),
+                        );
+                      },
                     ),
                     const SizedBox(height: 15),
                     FeatureCard(
@@ -151,11 +159,15 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 15),
                     FeatureCard(
                       icon: Icons.people_outline,
-                      title: 'COMMUNITY',
-                      description: 'space where people connect, share ideas, and solve problems together.',
-                      onTap: () {},
+                      title: 'AR & VR MODELS',
+                      description: 'Convert any diagram into a real-life representation.',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ARScreen()),
+                        );
+                      },
                     ),
-
                   ],
                 ),
               ),
@@ -168,7 +180,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Advantages',
                       style: TextStyle(
                         fontSize: 24,
@@ -209,6 +221,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: const BottomNavBar(), // Adding the BottomNavBar here
     );
   }
 }

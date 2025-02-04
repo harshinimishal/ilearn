@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'ResetPassword.dart';
 
 class VerificationCodeScreen extends StatefulWidget {
-  const VerificationCodeScreen({Key? key}) : super(key: key);
+  const VerificationCodeScreen({super.key});
 
   @override
   State<VerificationCodeScreen> createState() => _VerificationCodeScreenState();

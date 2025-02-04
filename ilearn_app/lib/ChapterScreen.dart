@@ -3,7 +3,7 @@ import 'ChapterItem.dart';
 import '../widgets/BottomNavBar.dart';
 
 class ChaptersScreen extends StatelessWidget {
-  const ChaptersScreen({Key? key}) : super(key: key);
+  const ChaptersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +54,9 @@ class ChaptersScreen extends StatelessWidget {
                   title: 'ABCDEF',
                   onFlashcardsPressed: () {
                     Navigator.pushNamed(context, '/flashcards');
+                  },
+                  onStartQuizPressed: () {
+                    Navigator.pushNamed(context, '/quizscreen');
                   },
                 );
               },

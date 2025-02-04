@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/BottomNavBar.dart';
 
 class FlashcardsScreen extends StatefulWidget {
-  const FlashcardsScreen({Key? key}) : super(key: key);
+  const FlashcardsScreen({super.key});
 
   @override
   State<FlashcardsScreen> createState() => _FlashcardsScreenState();

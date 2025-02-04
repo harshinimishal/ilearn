@@ -4,7 +4,7 @@ import '../widgets/custom_input_field.dart';
 import '../widgets/PrimaryButton.dart';
 
 class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen({Key? key}) : super(key: key);
+  const ResetPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +44,14 @@ class ResetPasswordScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
-                    const CustomInputField(
+                    CustomInputField(
+                      controller: TextEditingController(),
                       icon: Icons.lock_outline,
                       hint: 'New Password',
                       isPassword: true,
                     ),
-                    const SizedBox(height: 16),
-                    const CustomInputField(
+                    CustomInputField(
+                      controller: TextEditingController(),
                       icon: Icons.lock_outline,
                       hint: 'Confirm Password',
                       isPassword: true,

@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 
-class CustomInputField extends StatelessWidget {
+class CustomInputField extends StatefulWidget {
+  final TextEditingController controller;
   final IconData icon;
   final String hint;
   final bool isPassword;
 
   const CustomInputField({
-    Key? key,
+    super.key,
+    required this.controller,
     required this.icon,
     required this.hint,
     this.isPassword = false,
-  }) : super(key: key);
+  });
+
+  @override
+  _CustomInputFieldState createState() => _CustomInputFieldState();
+}
+
+class _CustomInputFieldState extends State<CustomInputField> {
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +37,11 @@ class CustomInputField extends StatelessWidget {
         ],
       ),
       child: TextField(
-        obscureText: isPassword,
+        controller: widget.controller,
+        obscureText: widget.isPassword ? _obscureText : false,
         decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: Colors.grey),
-          hintText: hint,
+          prefixIcon: Icon(widget.icon, color: Colors.grey),
+          hintText: widget.hint,
           hintStyle: const TextStyle(color: Colors.grey),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
@@ -39,6 +49,19 @@ class CustomInputField extends StatelessWidget {
           ),
           filled: true,
           fillColor: Colors.white,
+          suffixIcon: widget.isPassword
+              ? IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                )
+              : null,
         ),
       ),
     );

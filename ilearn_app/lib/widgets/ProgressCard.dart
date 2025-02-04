@@ -5,10 +5,10 @@ class ProgressCard extends StatelessWidget {
   final int total;
 
   const ProgressCard({
-    Key? key,
+    super.key,
     required this.learned,
     required this.total,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

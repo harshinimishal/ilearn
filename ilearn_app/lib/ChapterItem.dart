@@ -4,13 +4,15 @@ class ChapterItem extends StatefulWidget {
   final String chapterNumber;
   final String title;
   final VoidCallback onFlashcardsPressed;
+  final VoidCallback onStartQuizPressed;
 
   const ChapterItem({
-    Key? key,
+    super.key,
     required this.chapterNumber,
     required this.title,
     required this.onFlashcardsPressed,
-  }) : super(key: key);
+    required this.onStartQuizPressed,
+  });
 
   @override
   State<ChapterItem> createState() => _ChapterItemState();
@@ -76,7 +78,7 @@ class _ChapterItemState extends State<ChapterItem> {
             child: Column(
               children: [
                 _buildOptionButton('FLASH CARDS', widget.onFlashcardsPressed),
-                _buildOptionButton('Take a Test', () {}),
+                _buildOptionButton('Take a Test', widget.onStartQuizPressed),
                 _buildOptionButton('CHAPTER SOLUTION', () {}),
                 _buildOptionButton('NOTES', () {}),
               ],
