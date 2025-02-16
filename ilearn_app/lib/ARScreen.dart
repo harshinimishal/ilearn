@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ARScreen extends StatelessWidget {
-  const ARScreen({Key? key}) : super(key: key);
+  const ARScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

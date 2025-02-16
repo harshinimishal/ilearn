@@ -5,10 +5,12 @@ import '../widgets/FeatureCard.dart';
 import '../widgets/AdvantageCard.dart';
 import '/ChatScreen.dart';
 import '/ARScreen.dart';
-import 'widgets/BottomNavBar.dart'; // Importing the BottomNavBar
+import '../widgets/BottomNavBar.dart'; // Ensure correct path
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final String userName;
+
+  const HomeScreen({super.key, required this.userName});
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +36,9 @@ class HomeScreen extends StatelessWidget {
                     CircleAvatar(
                       backgroundColor: const Color(0xFF097D66),
                       radius: 25,
-                      child: const Text(
-                        'A',
-                        style: TextStyle(
+                      child: Text(
+                        userName[0].toUpperCase(),
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -54,14 +56,14 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hi, Arya',
-                      style: TextStyle(
+                      'Hi, $userName',
+                      style: const TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF097D66),
                       ),
                     ),
-                    Text(
+                    const Text(
                       "Let's start learning",
                       style: TextStyle(
                         fontSize: 20,
@@ -75,10 +77,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Progress Card
-              ProgressCard(
-                learned: 46,
-                total: 60,
-              ),
+              const ProgressCard(learned: 46, total: 60),
 
               const SizedBox(height: 30),
 
@@ -88,7 +87,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Subjects',
                       style: TextStyle(
                         fontSize: 24,
@@ -102,11 +101,11 @@ class HomeScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           SubjectCard(title: 'SCIENCE I', image: 'assets/images/chemistry.png', onTap: () {}),
-                          SubjectCard(title: 'MATHEMATICS I', image: 'assets/images/chemistry.png', onTap: () {}),
-                          SubjectCard(title: 'SCIENCE II', image: 'assets/images/chemistry.png', onTap: () {}),
-                          SubjectCard(title: 'MATHEMATICS II', image: 'assets/images/chemistry.png', onTap: () {}),
-                          SubjectCard(title: 'HISTORY', image: 'assets/images/chemistry.png', onTap: () {}),
-                          SubjectCard(title: 'GEOGRAPHY', image: 'assets/images/chemistry.png', onTap: () {}),
+                          SubjectCard(title: 'MATHEMATICS I', image: 'assets/images/math.png', onTap: () {}),
+                          SubjectCard(title: 'SCIENCE II', image: 'assets/images/physics.png', onTap: () {}),
+                          SubjectCard(title: 'MATHEMATICS II', image: 'assets/images/math2.png', onTap: () {}),
+                          SubjectCard(title: 'HISTORY', image: 'assets/images/history.png', onTap: () {}),
+                          SubjectCard(title: 'GEOGRAPHY', image: 'assets/images/geography.png', onTap: () {}),
                         ],
                       ),
                     ),
@@ -122,7 +121,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Explore',
                       style: TextStyle(
                         fontSize: 24,
@@ -134,39 +133,29 @@ class HomeScreen extends StatelessWidget {
                     FeatureCard(
                       icon: Icons.people_outline,
                       title: 'AI TUTOR',
-                      description: 'Assistant that helps you learn and grow smarter anytime, anywhere.',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ChatScreen()),
-                        );
-                      },
+                      description: 'Get an AI-powered assistant to help you learn and grow smarter anytime, anywhere.',
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatScreen())),
+                    ),
+                    const SizedBox(height: 15),
+                    FeatureCard(
+                      icon: Icons.book,
+                      title: 'TEXTBOOKS',
+                      description: 'Access a vast library of textbooks at your fingertips.',
+                      onTap: () {},
                     ),
                     const SizedBox(height: 15),
                     FeatureCard(
                       icon: Icons.language,
-                      title: 'TEXTBOOKS',
-                      description: 'Access knowledge with free textbooks for everyone, anytime.',
-                      onTap: () {},
-                    ),
-                    const SizedBox(height: 15),
-                    FeatureCard(
-                      icon: Icons.people_outline,
                       title: 'MULTILINGUAL',
-                      description: 'Bridges language gaps for nationwide audience to learn and grow.',
+                      description: 'Learn in multiple languages for better understanding.',
                       onTap: () {},
                     ),
                     const SizedBox(height: 15),
                     FeatureCard(
-                      icon: Icons.people_outline,
+                      icon: Icons.vrpano,
                       title: 'AR & VR MODELS',
-                      description: 'Convert any diagram into a real-life representation.',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ARScreen()),
-                        );
-                      },
+                      description: 'Experience interactive 3D learning models.',
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ARScreen())),
                     ),
                   ],
                 ),
@@ -180,7 +169,7 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Advantages',
                       style: TextStyle(
                         fontSize: 24,
@@ -191,25 +180,25 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 15),
                     AdvantageCard(
                       title: 'ALL SUBJECTS',
-                      description: 'Caters to all the subjects of 10th class mapped as per academic curriculum.',
+                      description: 'Covers all major subjects with comprehensive content.',
                       image: 'assets/images/all_subjects.png',
                     ),
                     const SizedBox(height: 15),
                     AdvantageCard(
                       title: 'EASY TO REMEMBER',
-                      description: 'Learn effortlessly with flashcards, quizzes etc designed to make chapters easy to remember and fun to explore!',
+                      description: 'Enhance memory with quizzes and flashcards.',
                       image: 'assets/images/easy_remember.png',
                     ),
                     const SizedBox(height: 15),
                     AdvantageCard(
                       title: 'FREE FOR ALL',
-                      description: 'Completely free to use, offering all features at no cost—no subscriptions or hidden charges!',
+                      description: 'No hidden charges, free learning for everyone.',
                       image: 'assets/images/free_service.png',
                     ),
                     const SizedBox(height: 15),
                     AdvantageCard(
                       title: '24/7 ACCESS',
-                      description: '4X7 access to our content with mobile phones',
+                      description: 'Study anytime, anywhere with full access.',
                       image: 'assets/images/access.png',
                     ),
                   ],
@@ -221,7 +210,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(), // Adding the BottomNavBar here
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }
